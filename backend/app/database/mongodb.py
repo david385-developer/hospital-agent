@@ -13,7 +13,7 @@ class MongoDB:
 db_instance = MongoDB()
 
 # Synchronous pymongo client and db instance for CrewAI tools and synchronous SSE streaming
-sync_client = MongoClient(settings.mongodb_uri)
+sync_client = MongoClient(settings.mongodb_uri, serverSelectionTimeoutMS=5000)
 _uri_parts = settings.mongodb_uri.split('/')
 _db_name = None
 if len(_uri_parts) > 3:
@@ -28,7 +28,7 @@ async def connect_to_mongo():
     """
     try:
         logger.info("Connecting to MongoDB...")
-        db_instance.client = AsyncIOMotorClient(settings.mongodb_uri)
+        db_instance.client = AsyncIOMotorClient(settings.mongodb_uri, serverSelectionTimeoutMS=5000)
         
         # Safe database name extraction
         uri_parts = settings.mongodb_uri.split('/')
@@ -41,12 +41,13 @@ async def connect_to_mongo():
             
         db_instance.db = db_instance.client[db_name]
         
-        # Ping database to verify connection
+        # Ping database to verify connection with a short 5s timeout
         await db_instance.client.admin.command('ping')
         logger.info(f"Successfully connected to MongoDB database: {db_name}")
     except Exception as e:
-        logger.error(f"Failed to connect to MongoDB: {e}")
-        raise e
+        logger.error(f"Failed to connect to MongoDB within 5s: {e}")
+        # Do not raise here so Uvicorn can proceed to bind to the port on cloud platforms like Render
+
 
 async def close_mongo_connection():
     """

@@ -33,13 +33,20 @@ UPLOADS_DIR.mkdir(parents=True, exist_ok=True)
 async def lifespan(app: FastAPI):
     """
     Manages FastAPI startup and shutdown lifecycle hooks.
-    Initializes MongoDB pool and connects to the Chroma Vector Database.
+    Initializes MongoDB pool and connects to the Chroma Vector Database without blocking port binding.
     """
     logger.info("Initializing application dependencies...")
     # 1. Connect MongoDB
-    await connect_to_mongo()
+    try:
+        await connect_to_mongo()
+    except Exception as e:
+        logger.warning(f"MongoDB initial connection delayed/failed: {e}. Server will continue starting to bind port.")
+    
     # 2. Connect ChromaDB
-    connect_to_chroma()
+    try:
+        connect_to_chroma()
+    except Exception as e:
+        logger.warning(f"ChromaDB initial connection delayed/failed: {e}. Server will continue starting to bind port.")
     
     yield
     
