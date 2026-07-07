@@ -1,0 +1,31 @@
+# backend/render.yaml
+# Render Blueprint Infrastructure as Code for FastAPI AI Backend
+services:
+  - type: web
+    name: hospital-ops-backend
+    env: python
+    region: oregon
+    plan: starter # NOTE: Starter plan ($7/mo) or higher recommended due to AI/ML embedding memory usage (>512MB RAM)
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: CHROMA_PERSIST_DIR
+        value: ./chroma_db
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: JWT_EXPIRATION_HOURS
+        value: 24
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        sync: false # Set securely in your Render Dashboard
+      - key: GROQ_API_KEY
+        sync: false # Set securely in your Render Dashboard
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false # Set securely in your Render Dashboard
+      - key: CLOUDINARY_API_KEY
+        sync: false # Set securely in your Render Dashboard
+      - key: CLOUDINARY_API_SECRET
+        sync: false # Set securely in your Render Dashboard

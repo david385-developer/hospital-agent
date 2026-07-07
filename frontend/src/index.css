@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-[#0a0e1a] text-[#f8fafc] font-sans antialiased;
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-[#0a0e1a];
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-[#334155] rounded;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-[#475569];
+  }
+}
+
+@layer keyframes {
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  @keyframes agent-running {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scan-line {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(100%);
+    }
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-[#1e293b]/50 backdrop-blur-md border border-[#334155]/50 rounded-xl;
+  }
+
+  .critical-glow {
+    @apply shadow-[0_0_20px_rgba(239,68,68,0.5)];
+  }
+
+  .success-glow {
+    @apply shadow-[0_0_20px_rgba(34,197,94,0.5)];
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-[#3b82f6] to-[#a855f7] bg-clip-text text-transparent;
+  }
+
+  .skeleton {
+    @apply animate-pulse bg-[#334155] rounded;
+  }
+
+  .skeleton-text {
+    @apply skeleton h-4 w-full;
+  }
+
+  .skeleton-card {
+    @apply skeleton h-40 w-full;
+  }
+}
+
